@@ -31,8 +31,20 @@ about 25 s at 4K. A GPU makes the render near real-time.
 
 The player (`index.html`) offers play/pause, a scrubber, playback speed, the
 edited film or any single camera (**CAM 1–4**), a free orbit camera, a
-caption toggle, and a live **film length** field that retimes the whole
-construction.
+quality setting, a caption toggle, and a live **film length** field that
+retimes the whole construction. A hosted copy (three.js from jsDelivr)
+is published at https://claude.ai/artifact/25Zz4bQSb3RsiLn883shjH. It is
+private until shared.
+
+### Rendered outputs
+| file | what |
+|---|---|
+| `output/de-paul-construction_1920x1080.mp4` | final film, 1920×1080, 24 fps, 30 s, H.264 (MSAA ×4, GTAO, ACES) |
+| `output/preview_640x360_12fps.mp4` | quick draft used for timing review |
+
+Render cost on the 4-core CPU container that produced them (software WebGL):
+about 11 s per 1080p frame. A 4K master (`--preset final`) takes about 25 s
+per frame there, and is near real-time on any GPU.
 
 ## Project layout
 
