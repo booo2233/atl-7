@@ -136,7 +136,7 @@ export function setupCraneRigs(runtime, elements) {
       ph = top + 3.5;
     }
     // before dismantling, park the jib over the open courtyard mouth (+Z)
-    const park = smoothstep(dismantle - 0.03, dismantle - 0.004, T);
+    const park = smoothstep(dismantle - 0.055, dismantle - 0.022, T);
     angle[i] = pa; radius[i] = pr * (1 - park) + 12 * park; hookY[i] = ph * (1 - park) + (jibY - 4) * park;
     if (park > 0) angle[i] = pa + (wrap(-Math.PI / 2 - pa)) * park;
   }

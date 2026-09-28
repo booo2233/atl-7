@@ -1,0 +1,482 @@
+{
+  "pass1": {
+    "fixes": [
+      {
+        "rule": "dependency-order",
+        "count": 3995,
+        "passes": 4,
+        "byGroup": {
+          "crane.mast": {
+            "count": 10,
+            "maxShiftFrames": 55
+          },
+          "found.pedestals": {
+            "count": 21,
+            "maxShiftFrames": 1
+          },
+          "crane.top": {
+            "count": 4,
+            "maxShiftFrames": 63
+          },
+          "found.groundslab": {
+            "count": 25,
+            "maxShiftFrames": 2
+          },
+          "frame.beams.F*": {
+            "count": 668,
+            "maxShiftFrames": 2
+          },
+          "slabs.F*": {
+            "count": 231,
+            "maxShiftFrames": 3
+          },
+          "pav.porch": {
+            "count": 4,
+            "maxShiftFrames": 71
+          },
+          "pav.beams.F*": {
+            "count": 20,
+            "maxShiftFrames": 78
+          },
+          "walls.F*": {
+            "count": 2437,
+            "maxShiftFrames": 6
+          },
+          "pav.slab.F*": {
+            "count": 6,
+            "maxShiftFrames": 77
+          },
+          "pav.columns.F*": {
+            "count": 2,
+            "maxShiftFrames": 75
+          },
+          "pav.stage": {
+            "count": 1,
+            "maxShiftFrames": 7
+          },
+          "pav.walls": {
+            "count": 155,
+            "maxShiftFrames": 59
+          },
+          "exterior.chajjas": {
+            "count": 49,
+            "maxShiftFrames": 17
+          },
+          "roof.parapets": {
+            "count": 60,
+            "maxShiftFrames": 5
+          },
+          "roof.mumty.walls": {
+            "count": 22,
+            "maxShiftFrames": 22
+          },
+          "tower.beams": {
+            "count": 7,
+            "maxShiftFrames": 1
+          },
+          "pav.roof.frame": {
+            "count": 43,
+            "maxShiftFrames": 52
+          },
+          "tower.walls": {
+            "count": 14,
+            "maxShiftFrames": 5
+          },
+          "tower.slab": {
+            "count": 1,
+            "maxShiftFrames": 0
+          },
+          "roof.trusses": {
+            "count": 11,
+            "maxShiftFrames": 20
+          },
+          "roof.mumty.slab": {
+            "count": 1,
+            "maxShiftFrames": 48
+          },
+          "tower.tank.walls": {
+            "count": 32,
+            "maxShiftFrames": 31
+          },
+          "pav.roof.tiles": {
+            "count": 28,
+            "maxShiftFrames": 30
+          },
+          "roof.purlins": {
+            "count": 75,
+            "maxShiftFrames": 18
+          },
+          "tower.tank.slab": {
+            "count": 1,
+            "maxShiftFrames": 50
+          },
+          "roof.sheets": {
+            "count": 21,
+            "maxShiftFrames": 16
+          },
+          "tower.roof.purlins": {
+            "count": 20,
+            "maxShiftFrames": 4
+          },
+          "tower.roof.sheets": {
+            "count": 4,
+            "maxShiftFrames": 6
+          },
+          "sitework.courtlines": {
+            "count": 11,
+            "maxShiftFrames": 19
+          },
+          "finishing.trims": {
+            "count": 9,
+            "maxShiftFrames": 5
+          },
+          "sitework.shed.frame": {
+            "count": 2,
+            "maxShiftFrames": 2
+          }
+        }
+      },
+      {
+        "rule": "finish-after-build",
+        "count": 14
+      }
+    ],
+    "problems": [
+      {
+        "check": "floating-elements",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "check": "starts-before-support-complete",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "check": "windows-before-walls",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "check": "roof-before-top-slab",
+        "count": 0,
+        "note": "roof slab complete at T=0.422"
+      },
+      {
+        "check": "interpenetrations",
+        "count": 0,
+        "byPair": {},
+        "examples": []
+      },
+      {
+        "check": "invalid-timing",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "check": "snapping-motions(<8 frames)",
+        "count": 0
+      }
+    ],
+    "stats": {
+      "elements": 8194,
+      "systems": {
+        "footings": 118,
+        "pedestals": 118,
+        "plinth-beams": 167,
+        "ground-slab": 70,
+        "columns": 436,
+        "beams": 707,
+        "slabs": 206,
+        "roof-slab": 66,
+        "masonry": 3250,
+        "arch-spandrels": 52,
+        "window-frames": 276,
+        "glazing": 276,
+        "door-frames": 58,
+        "door-leaves": 58,
+        "jali": 107,
+        "chajjas": 219,
+        "trims": 323,
+        "steps": 19,
+        "floor-bands": 75,
+        "corbels": 64,
+        "parapets": 120,
+        "downpipes": 7,
+        "porch-columns": 4,
+        "stage": 2,
+        "grilles": 1,
+        "ledge": 1,
+        "rafters": 90,
+        "roof-tiles": 106,
+        "ridge-tiles": 5,
+        "gablet": 2,
+        "roof-posts": 88,
+        "roof-trusses": 44,
+        "roof-purlins": 352,
+        "roof-sheets": 88,
+        "roof-ridge": 40,
+        "mumty": 28,
+        "tower-columns": 14,
+        "tower-beams": 14,
+        "tower-slab": 1,
+        "tower-tank": 1,
+        "signs": 4,
+        "setting-out": 61,
+        "paving": 207,
+        "court-lines": 11,
+        "hoops": 2,
+        "shed": 20,
+        "fence": 39,
+        "turf": 54,
+        "planting": 46,
+        "buses": 56,
+        "crane": 21
+      },
+      "categories": {
+        "found": 475,
+        "frame": 1204,
+        "slab": 273,
+        "wall": 3449,
+        "opening": 441,
+        "glass": 334,
+        "feature": 379,
+        "trim": 323,
+        "fixture": 10,
+        "roofframe": 577,
+        "roofcover": 249,
+        "sign": 4,
+        "temp": 82,
+        "site": 292,
+        "plant": 46,
+        "vehicle": 56
+      },
+      "finalState": {
+        "permanentComplete": 8112,
+        "permanentTotal": 8112,
+        "temporaryRemoved": 82,
+        "temporaryTotal": 82,
+        "paintedBeforeHold": 5747,
+        "finishable": 5747,
+        "emptyAtFrame1": true,
+        "monotonicGrowth": true
+      },
+      "ms": 599
+    },
+    "checkpoints": [
+      {
+        "name": "frame 1 (empty site)",
+        "frame": 1,
+        "visible": 0,
+        "permanent": 0,
+        "complete": 0
+      },
+      {
+        "name": "early construction",
+        "frame": 87,
+        "visible": 427,
+        "permanent": 377,
+        "complete": 252
+      },
+      {
+        "name": "structural midpoint",
+        "frame": 217,
+        "visible": 1701,
+        "permanent": 1680,
+        "complete": 1442
+      },
+      {
+        "name": "facade construction",
+        "frame": 361,
+        "visible": 5633,
+        "permanent": 5612,
+        "complete": 5388
+      },
+      {
+        "name": "near completion",
+        "frame": 612,
+        "visible": 8010,
+        "permanent": 8010,
+        "complete": 7907
+      },
+      {
+        "name": "final frame",
+        "frame": 720,
+        "visible": 8112,
+        "permanent": 8112,
+        "complete": 8112
+      }
+    ],
+    "lateGroups": {}
+  },
+  "pass2": {
+    "fixes": [],
+    "problems": [
+      {
+        "check": "floating-elements",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "check": "starts-before-support-complete",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "check": "windows-before-walls",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "check": "roof-before-top-slab",
+        "count": 0,
+        "note": "roof slab complete at T=0.422"
+      },
+      {
+        "check": "interpenetrations",
+        "count": 0,
+        "byPair": {},
+        "examples": []
+      },
+      {
+        "check": "invalid-timing",
+        "count": 0,
+        "examples": []
+      },
+      {
+        "check": "snapping-motions(<8 frames)",
+        "count": 0
+      }
+    ],
+    "stats": {
+      "elements": 8194,
+      "systems": {
+        "footings": 118,
+        "pedestals": 118,
+        "plinth-beams": 167,
+        "ground-slab": 70,
+        "columns": 436,
+        "beams": 707,
+        "slabs": 206,
+        "roof-slab": 66,
+        "masonry": 3250,
+        "arch-spandrels": 52,
+        "window-frames": 276,
+        "glazing": 276,
+        "door-frames": 58,
+        "door-leaves": 58,
+        "jali": 107,
+        "chajjas": 219,
+        "trims": 323,
+        "steps": 19,
+        "floor-bands": 75,
+        "corbels": 64,
+        "parapets": 120,
+        "downpipes": 7,
+        "porch-columns": 4,
+        "stage": 2,
+        "grilles": 1,
+        "ledge": 1,
+        "rafters": 90,
+        "roof-tiles": 106,
+        "ridge-tiles": 5,
+        "gablet": 2,
+        "roof-posts": 88,
+        "roof-trusses": 44,
+        "roof-purlins": 352,
+        "roof-sheets": 88,
+        "roof-ridge": 40,
+        "mumty": 28,
+        "tower-columns": 14,
+        "tower-beams": 14,
+        "tower-slab": 1,
+        "tower-tank": 1,
+        "signs": 4,
+        "setting-out": 61,
+        "paving": 207,
+        "court-lines": 11,
+        "hoops": 2,
+        "shed": 20,
+        "fence": 39,
+        "turf": 54,
+        "planting": 46,
+        "buses": 56,
+        "crane": 21
+      },
+      "categories": {
+        "found": 475,
+        "frame": 1204,
+        "slab": 273,
+        "wall": 3449,
+        "opening": 441,
+        "glass": 334,
+        "feature": 379,
+        "trim": 323,
+        "fixture": 10,
+        "roofframe": 577,
+        "roofcover": 249,
+        "sign": 4,
+        "temp": 82,
+        "site": 292,
+        "plant": 46,
+        "vehicle": 56
+      },
+      "finalState": {
+        "permanentComplete": 8112,
+        "permanentTotal": 8112,
+        "temporaryRemoved": 82,
+        "temporaryTotal": 82,
+        "paintedBeforeHold": 5747,
+        "finishable": 5747,
+        "emptyAtFrame1": true,
+        "monotonicGrowth": true
+      },
+      "ms": 222
+    },
+    "checkpoints": [
+      {
+        "name": "frame 1 (empty site)",
+        "frame": 1,
+        "visible": 0,
+        "permanent": 0,
+        "complete": 0
+      },
+      {
+        "name": "early construction",
+        "frame": 87,
+        "visible": 427,
+        "permanent": 377,
+        "complete": 252
+      },
+      {
+        "name": "structural midpoint",
+        "frame": 217,
+        "visible": 1701,
+        "permanent": 1680,
+        "complete": 1442
+      },
+      {
+        "name": "facade construction",
+        "frame": 361,
+        "visible": 5633,
+        "permanent": 5612,
+        "complete": 5388
+      },
+      {
+        "name": "near completion",
+        "frame": 612,
+        "visible": 8010,
+        "permanent": 8010,
+        "complete": 7907
+      },
+      {
+        "name": "final frame",
+        "frame": 720,
+        "visible": 8112,
+        "permanent": 8112,
+        "complete": 8112
+      }
+    ],
+    "lateGroups": {}
+  }
+}

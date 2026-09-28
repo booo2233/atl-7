@@ -13,7 +13,11 @@ import { CAPTIONS } from './film/hud.js';
 const q = new URLSearchParams(location.search);
 const mode = q.get('mode') || 'player';
 const statusEl = document.getElementById('status');
-const log = (m) => { if (statusEl) statusEl.textContent = `Building… ${m}`; };
+const stepEl = document.getElementById('status-step');
+const log = (m) => {
+  if (stepEl) stepEl.textContent = `Generating ${m}…`;
+  else if (statusEl) statusEl.textContent = `Building… ${m}`;
+};
 
 async function startRender() {
   const w = Number(q.get('w') || FILM.width), h = Number(q.get('h') || FILM.height);
@@ -69,8 +73,10 @@ function applyLookOverrides(film) {
 
 async function startPlayer() {
   const canvas = document.getElementById('film');
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const size = () => [Math.floor(window.innerWidth * dpr), Math.floor(window.innerHeight * dpr)];
+  const qualityEl = document.getElementById('quality');
+  const SCALE = { high: Math.min(window.devicePixelRatio || 1, 2), balanced: 1, fast: 0.6 };
+  let quality = qualityEl ? qualityEl.value : 'high';
+  const size = () => [Math.floor(window.innerWidth * SCALE[quality]), Math.floor(window.innerHeight * SCALE[quality])];
   const [w, h] = size();
   canvas.width = w; canvas.height = h;
   const film = new Film(canvas, { width: w, height: h, ao: q.get('ao') !== '0', msaa: 4, captions: true });
@@ -95,19 +101,31 @@ async function startPlayer() {
   lenInput.value = FILM.seconds;
 
   let playing = true, T = 0, last = performance.now();
-  play.onclick = () => { playing = !playing; play.textContent = playing ? 'Pause' : 'Play'; last = performance.now(); };
-  scrub.oninput = () => { T = Number(scrub.value) / 1000; };
+  play.onclick = () => { playing = !playing; play.textContent = playing ? 'Pause' : 'Play'; last = performance.now(); if (!playing) ui.classList.remove('idle'); };
+  scrub.oninput = () => { T = Math.min(1, Math.max(0, Number(scrub.value) / 1000)); };
   camSel.onchange = () => { film.cameraMode = camSel.value; };
   capChk.onchange = () => { film.hud.enabled = capChk.checked; };
   lenInput.onchange = () => { FILM.seconds = Math.max(8, Math.min(180, Number(lenInput.value) || 30)); };
-  window.addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); play.onclick(); } });
-  window.addEventListener('resize', () => {
+  window.addEventListener('keydown', (e) => { if (e.code === 'Space' && e.target.tagName !== 'INPUT') { e.preventDefault(); play.onclick(); } });
+  // the dock fades out while the film plays and the viewer is idle
+  let idleTimer = 0;
+  const wake = () => {
+    ui.classList.remove('idle');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => { if (playing) ui.classList.add('idle'); }, 2500);
+  };
+  for (const ev of ['pointermove', 'pointerdown', 'keydown', 'touchstart']) window.addEventListener(ev, wake, { passive: true });
+  wake();
+  const onResize = () => {
     const [nw, nh] = size();
     film.resize(nw, nh); free.aspect = nw / nh; free.updateProjectionMatrix();
-  });
+    if (film.post.gtao) film.post.gtao.enabled = quality !== 'fast';
+  };
+  window.addEventListener('resize', onResize);
+  if (qualityEl) qualityEl.onchange = () => { quality = qualityEl.value; onResize(); };
 
   function tick(now) {
-    const dt = Math.min(0.1, (now - last) / 1000); last = now;
+    const dt = Math.min(0.1, Math.max(0, (now - last) / 1000)); last = now;
     if (playing) { T += (dt * Number(speedSel.value)) / FILM.seconds; if (T > 1) T = 0; }
     controls.update();
     film.renderT(T, { freeCamera: free });
@@ -115,7 +133,7 @@ async function startPlayer() {
     const s = T * FILM.seconds;
     timeEl.textContent = `${s.toFixed(1)} s / ${FILM.seconds} s · frame ${Math.round(T * (film.frameCount - 1)) + 1}`;
     const cap = CAPTIONS.find((c) => T >= c.from && T < c.to);
-    const shot = EDIT.find((e) => T >= e.from && T < e.to);
+    const shot = EDIT.find((e) => T >= e.from && T < e.to) || EDIT[EDIT.length - 1];
     phaseEl.textContent = `${cap ? `${cap.n} ${cap.title}` : 'Completed'} · ${film.runtime.visibleCount} elements standing · ${film.cameraMode === 'edit' ? CAMERAS[shot.cam].label : camSel.selectedOptions[0].text}`;
     requestAnimationFrame(tick);
   }

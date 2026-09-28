@@ -1,45 +1,102 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>De Paul Public School — Construction Film</title>
-  <style>
-    html, body { margin: 0; height: 100%; background: #0b0c0e; color: #e9e7e2; font: 14px/1.4 "Liberation Sans", "DejaVu Sans", system-ui, sans-serif; overflow: hidden; }
-    #film { display: block; width: 100vw; height: 100vh; }
-    body.render #film { width: auto; height: auto; }
-    #status { position: fixed; inset: 0; display: grid; place-items: center; letter-spacing: .08em; color: #bbb; }
-    #ui { position: fixed; left: 16px; right: 16px; bottom: 16px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center;
-          padding: 10px 14px; background: rgba(12, 14, 17, .72); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; backdrop-filter: blur(6px); }
-    #ui[hidden] { display: none; }
-    #ui button, #ui select, #ui input[type=number] { background: #1d2126; color: #eee; border: 1px solid #333a42; border-radius: 6px; padding: 5px 10px; font: inherit; }
-    #scrub { flex: 1 1 260px; accent-color: #d9c28a; }
-    #time { font-variant-numeric: tabular-nums; min-width: 190px; opacity: .85; }
-    #phase { flex: 1 1 100%; opacity: .75; font-size: 13px; }
-    label { display: inline-flex; gap: 6px; align-items: center; opacity: .85; }
-    #length { width: 64px; }
-  </style>
-  <script type="importmap">
-  { "imports": {
-      "three": "./node_modules/three/build/three.module.js",
-      "three/addons/": "./node_modules/three/examples/jsm/"
-  } }
-  </script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>De Paul School Construction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Zilla+Slab:wght@500;600&display=swap">
+<style>
+  /* Layout: full-bleed film stage; a slim control dock floats over its lower
+     edge and fades away while the film plays; a loading veil names the
+     school while it is generated. One deliberate dark look (a screening room). */
+  :root {
+    --bg: #0c0f10;            /* night slate */
+    --panel: rgba(14, 18, 19, 0.82);
+    --line: #2b3334;
+    --fg: #eceae4;            /* painted plaster */
+    --muted: #9ba39f;
+    --accent: #9a8fc9;        /* the school's lavender trim */
+    --laterite: #c2663f;      /* raw laterite blockwork */
+    --display: "Zilla Slab", Rockwell, "Roboto Slab", Georgia, serif;
+    --ui: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+    color-scheme: dark;
+  }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.45 var(--ui); overflow: hidden; }
+  #film { position: fixed; inset: 0; width: 100%; height: 100%; display: block; background: var(--bg); }
+  body.render #film { position: static; width: auto; height: auto; }
+
+  .veil { position: fixed; inset: 0; display: grid; place-content: center; gap: 14px; padding-inline: 24px; text-align: left;
+    background: radial-gradient(120% 90% at 20% 110%, rgba(194, 102, 63, 0.18), transparent 60%), var(--bg); }
+  .veil .inner { display: grid; gap: 12px; max-width: 34rem; }
+  .eyebrow { margin: 0; font: 500 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .veil h1 { margin: 0; font: 600 clamp(2rem, 6vw, 3.6rem)/1.02 var(--display); letter-spacing: 0.01em; text-wrap: balance; }
+  .lede { margin: 0; color: var(--muted); font-size: 15px; max-width: 32rem; }
+  .facts { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 4px 0 0; padding: 0; list-style: none; font: 400 12px/1.4 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .facts b { color: var(--fg); font-weight: 500; }
+  .step { margin: 8px 0 0; font: 400 12px/1.4 var(--mono); color: var(--accent); }
+  .bar { height: 2px; background: var(--line); overflow: hidden; border-radius: 1px; }
+  .bar span { display: block; height: 100%; width: 38%; background: var(--laterite); animation: lay 1.6s ease-in-out infinite; }
+  @keyframes lay { from { transform: translateX(-100%); } to { transform: translateX(270%); } }
+  @media (prefers-reduced-motion: reduce) { .bar span { animation: none; width: 100%; opacity: 0.5; } }
+
+  .dock { position: fixed; left: 16px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 10px 14px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px; backdrop-filter: blur(8px);
+    transition: opacity 0.4s ease; }
+  .dock.idle { opacity: 0; }
+  .dock:focus-within { opacity: 1; }
+  .dock button, .dock select, .dock input[type=number] { font: 500 13px/1 var(--ui); color: var(--fg); background: #182022;
+    border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; }
+  .dock button { min-width: 4.6rem; cursor: pointer; }
+  .dock button:hover { border-color: var(--accent); }
+  .dock :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .dock label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
+  #scrub { flex: 1 1 220px; min-width: 0; accent-color: var(--accent); }
+  .time { font: 400 12px/1 var(--mono); color: var(--fg); font-variant-numeric: tabular-nums; min-width: 15.5em; }
+  .phase { flex: 1 1 100%; margin: 0; font: 400 12px/1.4 var(--mono); color: var(--muted); min-width: 0; }
+  #length { width: 4.2em; }
+  @media (max-width: 560px) { .time { min-width: 0; } .dock label.opt { display: none; } }
+</style>
+<script type="importmap">
+{ "imports": {
+    "three": "./node_modules/three/build/three.module.js",
+    "three/addons/": "./node_modules/three/examples/jsm/"
+} }
+</script>
 </head>
 <body>
-  <canvas id="film"></canvas>
-  <div id="status">Building the school…</div>
-  <div id="ui" hidden>
-    <button id="play">Pause</button>
-    <input id="scrub" type="range" min="0" max="1000" value="0">
-    <span id="time"></span>
-    <select id="camera"><option value="edit">Edited film (4 cameras)</option></select>
-    <select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select>
-    <label><input id="captions" type="checkbox" checked> Captions</label>
-    <label>Length (s) <input id="length" type="number" min="8" max="180" step="1"></label>
-    <span id="phase"></span>
+<canvas id="film" aria-label="Construction film of De Paul Public School"></canvas>
+
+<div id="status" class="veil" role="status">
+  <div class="inner">
+    <p class="eyebrow">Procedural construction film</p>
+    <h1>De Paul Public School</h1>
+    <p class="lede">An empty hillside terrace becomes the school from the drone survey, built piece by piece: footings, frame, laterite walls, jali, roofs, plaster and paint.</p>
+    <ul class="facts">
+      <li><b>G+3</b> U-block</li><li><b>8,194</b> construction elements</li><li><b>30 s</b> at 24 fps</li><li><b>4</b> cameras</li>
+    </ul>
+    <p id="status-step" class="step">Generating the site…</p>
+    <div class="bar"><span></span></div>
   </div>
-  <script>if (new URLSearchParams(location.search).get('mode') === 'render') document.body.classList.add('render');</script>
-  <script type="module" src="./src/main.js"></script>
+</div>
+
+<div id="ui" class="dock" hidden>
+  <button id="play" type="button">Pause</button>
+  <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Film position">
+  <span id="time" class="time"></span>
+  <label>Camera <select id="camera"><option value="edit">Edited film</option></select></label>
+  <label class="opt">Speed <select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label>
+  <label>Quality <select id="quality"><option value="high">High</option><option value="balanced" selected>Balanced</option><option value="fast">Fast</option></select></label>
+  <label class="opt"><input id="captions" type="checkbox" checked> Captions</label>
+  <label class="opt">Length <input id="length" type="number" min="8" max="180" step="1"> s</label>
+  <p id="phase" class="phase"></p>
+</div>
+
+<script>if (new URLSearchParams(location.search).get('mode') === 'render') document.body.classList.add('render');</script>
+<script type="module" src="./src/main.js"></script>
 </body>
 </html>

@@ -51,7 +51,23 @@ export class Hud {
       if (aT > 0.001) this.title(ctx, 'DE PAUL PUBLIC SCHOOL', 'A procedural construction film  ·  reconstructed from aerial reference', aT, u, serif, sans);
       // closing title
       const aE = smoothstep(0.918, 0.94, T) * (1 - smoothstep(0.985, 0.998, T));
-      if (aE > 0.001) this.title(ctx, 'DE PAUL PUBLIC SCHOOL', 'Completed  ·  G+3 courtyard block, pavilion and tower', aE, u, serif, sans, 0.84);
+      if (aE > 0.001) {
+        // closing card sits where the phase captions were, clear of the building
+        ctx.save();
+        ctx.globalAlpha = aE;
+        ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 14 * u;
+        const x = 96 * u, y = h - 118 * u;
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.font = `600 ${22 * u}px ${sans}`;
+        ctx.fillText('COMPLETED', x, y - 58 * u);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `${56 * u}px ${serif}`;
+        ctx.fillText('De Paul Public School', x, y);
+        ctx.font = `${22 * u}px ${sans}`;
+        ctx.fillStyle = 'rgba(255,255,255,0.88)';
+        ctx.fillText('G+3 courtyard block, pavilion and tower  ·  reconstructed from aerial reference', x, y + 40 * u);
+        ctx.restore();
+      }
       // phase caption
       const cap = CAPTIONS.find((c) => T >= c.from && T < c.to);
       if (cap && T > 0.045) {

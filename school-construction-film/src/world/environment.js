@@ -195,7 +195,7 @@ function scatterForest(scene, materials, rnd) {
       scene.add(im);
     }
   };
-  const tint = (t, col) => col.setHSL(0.23 + t.c * 0.09, 0.42 + t.c * 0.25, 0.30 + t.c * 0.16);
+  const tint = (t, col) => col.setHSL(0.22 + t.c * 0.08, 0.26 + t.c * 0.2, 0.2 + t.c * 0.13);
   mk(broadleafGeometry(1, 4, 7), near.filter((_, i) => i % 2 === 0), true, tint);
   mk(broadleafGeometry(1, 3, 8), near.filter((_, i) => i % 2 === 1), true, tint);
   mk(broadleafGeometry(0, 3, 9), far, false, tint);

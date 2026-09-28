@@ -181,7 +181,7 @@ float lN(vec3 x){ vec3 i = floor(x); vec3 f = fract(x); f = f * f * (3.0 - 2.0 *
              mix(mix(lH(i + vec3(0,0,1)), lH(i + vec3(1,0,1)), f.x), mix(lH(i + vec3(0,1,1)), lH(i + vec3(1,1,1)), f.x), f.y), f.z); }`)
       .replace('#include <color_fragment>', `#include <color_fragment>
 float cl = lN(vLeafP * 1.1) * 0.55 + lN(vLeafP * 3.7) * 0.3 + lN(vLeafP * 11.0) * 0.15;
-diffuseColor.rgb *= 0.45 + 1.05 * smoothstep(0.25, 0.8, cl);`);
+diffuseColor.rgb *= 0.5 + 0.75 * smoothstep(0.25, 0.8, cl);`);
   };
   M.set('leaf', leaf);
   const shrub = leaf.clone();
