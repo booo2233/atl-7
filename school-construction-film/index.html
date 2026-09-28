@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>De Paul Public School — Construction Film</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #0b0c0e; color: #e9e7e2; font: 14px/1.4 "Liberation Sans", "DejaVu Sans", system-ui, sans-serif; overflow: hidden; }
+    #film { display: block; width: 100vw; height: 100vh; }
+    body.render #film { width: auto; height: auto; }
+    #status { position: fixed; inset: 0; display: grid; place-items: center; letter-spacing: .08em; color: #bbb; }
+    #ui { position: fixed; left: 16px; right: 16px; bottom: 16px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center;
+          padding: 10px 14px; background: rgba(12, 14, 17, .72); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; backdrop-filter: blur(6px); }
+    #ui[hidden] { display: none; }
+    #ui button, #ui select, #ui input[type=number] { background: #1d2126; color: #eee; border: 1px solid #333a42; border-radius: 6px; padding: 5px 10px; font: inherit; }
+    #scrub { flex: 1 1 260px; accent-color: #d9c28a; }
+    #time { font-variant-numeric: tabular-nums; min-width: 190px; opacity: .85; }
+    #phase { flex: 1 1 100%; opacity: .75; font-size: 13px; }
+    label { display: inline-flex; gap: 6px; align-items: center; opacity: .85; }
+    #length { width: 64px; }
+  </style>
+  <script type="importmap">
+  { "imports": {
+      "three": "./node_modules/three/build/three.module.js",
+      "three/addons/": "./node_modules/three/examples/jsm/"
+  } }
+  </script>
+</head>
+<body>
+  <canvas id="film"></canvas>
+  <div id="status">Building the school…</div>
+  <div id="ui" hidden>
+    <button id="play">Pause</button>
+    <input id="scrub" type="range" min="0" max="1000" value="0">
+    <span id="time"></span>
+    <select id="camera"><option value="edit">Edited film (4 cameras)</option></select>
+    <select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select>
+    <label><input id="captions" type="checkbox" checked> Captions</label>
+    <label>Length (s) <input id="length" type="number" min="8" max="180" step="1"></label>
+    <span id="phase"></span>
+  </div>
+  <script>if (new URLSearchParams(location.search).get('mode') === 'render') document.body.classList.add('render');</script>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

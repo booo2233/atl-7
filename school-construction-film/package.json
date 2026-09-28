@@ -1,0 +1,19 @@
+{
+  "name": "school-construction-film",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Procedural Three.js reconstruction and construction film of De Paul Public School",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "validate": "node tools/validate.mjs",
+    "render:preview": "node tools/render.mjs --preset preview",
+    "render:final": "node tools/render.mjs --preset final"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}
