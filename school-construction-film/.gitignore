@@ -1,0 +1,6 @@
+node_modules/
+output/stills/
+output/*.part*.mp4
+output/*.parts.txt
+output/*.log
+bench/
