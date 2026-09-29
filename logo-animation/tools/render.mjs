@@ -5,7 +5,7 @@
 //   node tools/render.mjs                         # 1920x1080, 60 fps, H.264 + audio
 //   node tools/render.mjs --stills 0,1.2,2.6,4,6  # JPEG stills at those seconds
 //   node tools/render.mjs --sheet 0.5              # contact sheet, one still every 0.5 s
-//   options: --workers N  --crf 16  --out output/file.mp4  --audio output/soundtrack.wav
+//   options: --page v1.html (first version)  --workers N  --crf 16  --out output/file.mp4  --audio output/soundtrack.wav
 import { spawn, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -51,7 +51,7 @@ async function openPage(browser, port) {
   page.setDefaultTimeout(0);
   page.on('pageerror', (e) => console.log('  [pageerror]', e.message));
   page.on('console', (m) => { if (m.type() === 'error') console.log('  [page]', m.text()); });
-  await page.goto(`http://127.0.0.1:${port}/index.html?mode=render`);
+  await page.goto(`http://127.0.0.1:${port}/${arg('page', 'index.html')}?mode=render`);
   await page.waitForFunction('window.LOGO_READY === true || window.LOGO_ERROR');
   const err = await page.evaluate('window.LOGO_ERROR');
   if (err) throw new Error(err);
@@ -92,7 +92,7 @@ async function main() {
     const from = Number(arg('from', 0)), to = Number(arg('to', frames));
     const workers = Number(arg('workers', 3));
     const crf = arg('crf', '16');
-    const out = path.resolve(ROOT, arg('out', 'output/de-paul-crest_1920x1080_60fps.mp4'));
+    const out = path.resolve(ROOT, arg('out', 'output/de-paul-kinetic_1920x1080_60fps.mp4'));
     const tmp = path.join(ROOT, 'output', 'chunks');
     fs.mkdirSync(tmp, { recursive: true });
     const per = Math.ceil((to - from) / workers);
