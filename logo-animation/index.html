@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De Paul Crest Reveal</title>
+<style>
+  :root { --bg: #03060d; --fg: #e8eef8; --dim: rgba(232, 238, 248, 0.62); --track: rgba(255, 255, 255, 0.18); }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font: 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; overflow: hidden; }
+  #stage { position: fixed; inset: 0; display: grid; place-items: center; }
+  canvas { width: min(100vw, calc(100vh * 16 / 9)); height: auto; aspect-ratio: 16 / 9; display: block; }
+  #status { position: fixed; inset: 0; display: grid; place-items: center; color: var(--dim); letter-spacing: 0.08em; }
+  #ui { position: fixed; left: 16px; right: 16px; bottom: 16px; display: flex; gap: 12px; align-items: center; transition: opacity 0.4s; }
+  #ui.idle { opacity: 0; }
+  #ui button { background: rgba(255, 255, 255, 0.1); color: var(--fg); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 999px; padding: 6px 14px; font: inherit; cursor: pointer; }
+  #ui input[type=range] { flex: 1; accent-color: #e8b04a; }
+  #time { color: var(--dim); font-variant-numeric: tabular-nums; min-width: 64px; text-align: right; }
+</style>
+</head>
+<body>
+<div id="stage"><canvas id="logo" width="1920" height="1080"></canvas></div>
+<div id="status">Loading…</div>
+<div id="ui" hidden>
+  <button id="play" type="button">Pause</button>
+  <input id="scrub" type="range" min="0" max="899" value="0" aria-label="Timeline">
+  <span id="time">0.00 s</span>
+</div>
+<script type="module">
+import { createLogo, FRAMES, FPS } from './src/logo.js';
+
+const q = new URLSearchParams(location.search);
+const canvas = document.getElementById('logo');
+const renderMode = q.get('mode') === 'render';
+try {
+  const logo = await createLogo(canvas, { readback: renderMode });
+  document.getElementById('status').remove();
+  if (renderMode) {
+    window.LOGO = logo;
+    window.LOGO_READY = true;
+  } else {
+    const ui = document.getElementById('ui');
+    const play = document.getElementById('play'), scrub = document.getElementById('scrub'), time = document.getElementById('time');
+    ui.hidden = false;
+    let playing = true, f = 0, last = performance.now(), idle = 0;
+    play.onclick = () => { playing = !playing; play.textContent = playing ? 'Pause' : 'Play'; last = performance.now(); };
+    scrub.oninput = () => { f = Number(scrub.value); };
+    addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); play.onclick(); } });
+    const wake = () => { ui.classList.remove('idle'); clearTimeout(idle); idle = setTimeout(() => playing && ui.classList.add('idle'), 2200); };
+    for (const ev of ['pointermove', 'pointerdown', 'keydown']) addEventListener(ev, wake, { passive: true });
+    wake();
+    const tick = (now) => {
+      const dt = Math.min(0.1, Math.max(0, (now - last) / 1000));
+      last = now;
+      if (playing) { f += dt * FPS; if (f >= FRAMES + FPS * 1.5) f = 0; }
+      const frame = Math.min(FRAMES - 1, Math.floor(f));
+      logo.render(frame);
+      scrub.value = String(frame);
+      time.textContent = `${(frame / FPS).toFixed(2)} s`;
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+} catch (err) {
+  console.error(err);
+  document.getElementById('status').textContent = `Error: ${err.message}`;
+  window.LOGO_ERROR = String(err.stack || err);
+}
+</script>
+</body>
+</html>

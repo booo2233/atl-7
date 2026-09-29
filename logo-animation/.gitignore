@@ -1,0 +1,6 @@
+output/chunks/
+output/stills/
+output/video_only.mp4
+output/render.log
+output/soundtrack.wav
+output/events.json
